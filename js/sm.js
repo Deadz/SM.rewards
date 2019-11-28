@@ -49,13 +49,22 @@ function showCard(id)
 	$("#rest").text(rest);
 	percent = (rest/max*100).toFixed(2);
 	$("#percent").text(percent);
-	if(percent < 6)
-		$("#remaining").attr("class", "w3-text-red");
+	if(percent <= 0)
+	{
+		$("#remaining").attr("class", "w3-text-black");
+		$("#rest").html("<i class='w3-text-red fas fa-skull-crossbones w3-large'></i> This card will NEVER be printed again!");
+		$("#percent").text(0);
+	}
 	else
 	{
-		if(percent > 4 && percent < 21)
-			$("#remaining").attr("class", "w3-text-orange");
+		if(percent < 6)
+			$("#remaining").attr("class", "w3-text-red");
 		else
-			$("#remaining").attr("class", "w3-text-green");	
+		{
+			if(percent > 4 && percent < 21)
+				$("#remaining").attr("class", "w3-text-orange");
+			else
+				$("#remaining").attr("class", "w3-text-green");	
+		}
 	}
 }
