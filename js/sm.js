@@ -57,11 +57,11 @@ function showCard(id)
 	}
 	else
 	{
-		if(percent < 6)
+		if(percent < 5.01)
 			$("#remaining").attr("class", "w3-text-red");
 		else
 		{
-			if(percent > 4 && percent < 21)
+			if(percent > 5 && percent < 20.01)
 				$("#remaining").attr("class", "w3-text-orange");
 			else
 				$("#remaining").attr("class", "w3-text-green");	
