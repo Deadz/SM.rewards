@@ -2,6 +2,7 @@ var cards   = [];
 var max     = 0;
 var rest    = 0;
 var percent = 0;
+var color   = "";
 
 $.ajax(
 {
@@ -14,7 +15,29 @@ $.ajax(
 		{
 			if(card["editions"].search("3") > -1)
 			{
-				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'>"+card["name"]+"</button>");
+				switch(card["rarity"])
+				{
+				  case 1:
+				    color = "w3-text-gray";
+				    max = 400000;
+				    break;
+				  case 2:
+				  	color = "w3-text-blue";
+				  	max = 100000;
+				  	break;
+				  case 3:
+				  	color = "w3-text-purple";
+				  	max = 40000;
+				    break;
+				  default:
+				  	color = "w3-text-amber";
+				  	max = 10000;
+				}
+				if((max-card["total_printed"]) >= 1)
+					$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+color+"'></i> "+card["name"]+"</button>");
+				else
+					$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+color+"'></i> <del>"+card["name"]+"</del></button>");
+
 			}
 		});
 	}
