@@ -48,7 +48,7 @@ function showCard(id)
 	$("button").removeClass("w3-red");
 	$("#"+id).toggleClass("w3-red");
 	$("#name").text(cards[id-1]["name"]);
-	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_beta/"+cards[id-1]["name"]+".png")
+	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_beta/"+cards[id-1]["name"]+"_lv"+cards[id-1].stats.abilities.length+".png")
 	switch(cards[id-1]["rarity"])
 	{
 	  case 1:
