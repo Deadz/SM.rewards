@@ -45,10 +45,20 @@ $.ajax(
 
 function showCard(id)
 {
+	let lvl = 0;
+	if (typeof cards[id-1].stats.abilities.length !== 'undefined') 
+	{
+	  lvl = cards[id-1].stats.abilities.length;
+	}
+	else
+	{
+	  lvl = 1;
+	}
+	
 	$("button").removeClass("w3-red");
 	$("#"+id).toggleClass("w3-red");
 	$("#name").text(cards[id-1]["name"]);
-	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+cards[id-1]["name"]+"_lv"+cards[id-1].stats.abilities.length+".png")
+	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+cards[id-1]["name"]+"_lv"+lvl+".png")
 	switch(cards[id-1]["rarity"])
 	{
 	  case 1:
