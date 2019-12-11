@@ -46,37 +46,33 @@ $.ajax(
 function showCard(id)
 {
 	let lvl = 0;
-	if (typeof cards[id-1].stats.abilities.length !== 'undefined') 
-	{
-	  lvl = cards[id-1].stats.abilities.length;
-	}
-	else
-	{
-	  lvl = 1;
-	}
 	
 	$("button").removeClass("w3-red");
 	$("#"+id).toggleClass("w3-red");
 	$("#name").text(cards[id-1]["name"]);
-	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+cards[id-1]["name"]+"_lv"+lvl+".png")
 	switch(cards[id-1]["rarity"])
 	{
 	  case 1:
-	    $("#max").text("400000");
-	    max = 400000;
+	  	$("#max").text("400000");
+	   	max = 400000;
+	  	lvl = 10;
 	    break;
 	  case 2:
 	  	$("#max").text("100000");
 	  	max = 100000;
+		lvl = 8;
 	  	break
 	  case 3:
 	  	$("#max").text("40000");
 	  	max = 40000;
+		lvl = 6;
 	    break;
 	  default:
 	  	$("#max").text("10000");
 	  	max = 10000;
+		lvl = 4;
 	}
+	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+cards[id-1]["name"]+"_lv"+lvl+".png")
 	$("#now").text(cards[id-1]["total_printed"]);
 	rest = max-cards[id-1]["total_printed"];
 	$("#rest").text(rest);
