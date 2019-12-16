@@ -32,9 +32,9 @@ $.ajax(
 			  	max = 10000;
 			}
 			if((max-card["total_printed"]) >= 1)
-				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+color+"'></i> "+card["name"]+" "+card['id']+"</button>");
+				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+color+"'></i> "+card["name"]+"</button>");
 			else
-				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+color+"'></i> <del class='w3-text-black'>"+card["name"]+" "+card['id']+"</del></button>");
+				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+color+"'></i> <del class='w3-text-black'>"+card["name"]+"</del></button>");
 
 		});
 	}
