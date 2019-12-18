@@ -16,29 +16,43 @@ $.ajax(
 			switch(card["rarity"])
 			{
 			  case 1:
-			    color = "w3-text-gray";
-			    max = 400000;
+			    card['color']  = "w3-text-gray";
+			    card['maxcap'] = 400000;
+			    card['maxlvl'] = 10;
 			    break;
 			  case 2:
-			  	color = "w3-text-blue";
-			  	max = 100000;
+			  	card['color']  = "w3-text-blue";
+			  	card['maxcap'] = 100000;
+			  	card['maxlvl'] = 8;
 			  	break;
 			  case 3:
-			  	color = "w3-text-purple";
-			  	max = 40000;
+			  	card['color']  = "w3-text-purple";
+			  	card['maxcap'] = 40000;
+			  	card['maxlvl'] = 6;
 			    break;
 			  default:
-			  	color = "w3-text-amber";
-			  	max = 10000;
+			  	card['color']  = "w3-text-amber";
+			  	card['maxcap'] = 10000;
+			  	card['maxlvl'] = 4;
 			}
-			if((max-card["total_printed"]) >= 1)
-				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+color+"'></i> "+card["name"]+"</button>");
+			if((card['maxcap']-card["total_printed"]) >= 1)
+				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='fas fa-dot-circle "+card["color"]+"'></i> "+card["name"]+"</button>");
 			else
-				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+color+"'></i> <del class='w3-text-black'>"+card["name"]+"</del></button>");
+				$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+card["color"]+"'></i> <del class='w3-text-black'>"+card["name"]+"</del></button>");
 
 		});
 	}
 });
+
+function w3_open()
+{
+	document.getElementById("nav").style.display = "block";
+}
+
+function w3_close()
+{
+	document.getElementById("nav").style.display = "none";
+}
 
 function showCard(id)
 {
@@ -53,34 +67,13 @@ function showCard(id)
 
 	$("button").removeClass("w3-red");
 	$("#"+id).toggleClass("w3-red");
-	$("#name").text(card["name"]);
-	switch(card["rarity"])
-	{
-	  case 1:
-	  	$("#max").text("400000");
-	   	max = 400000;
-	  	lvl = 10;
-	    break;
-	  case 2:
-	  	$("#max").text("100000");
-	  	max = 100000;
-		lvl = 8;
-	  	break
-	  case 3:
-	  	$("#max").text("40000");
-	  	max = 40000;
-		lvl = 6;
-	    break;
-	  default:
-	  	$("#max").text("10000");
-	  	max = 10000;
-		lvl = 4;
-	}
-	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+card["name"]+"_lv"+lvl+".png")
+	$("#max").text(card["maxcap"]);
+	
+	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+card["name"]+"_lv"+card["maxlvl"]+".png")
 	$("#now").text(card["total_printed"]);
-	rest = max-card["total_printed"];
+	rest = card["maxcap"]-card["total_printed"];
 	$("#rest").text(rest);
-	percent = (rest/max*100).toFixed(2);
+	percent = (rest/card["maxcap"]*100).toFixed(2);
 	$("#percent").text(percent);
 	if(percent <= 0)
 	{
@@ -100,4 +93,5 @@ function showCard(id)
 				$("#remaining").attr("class", "w3-text-green");	
 		}
 	}
+	w3_close();
 }
