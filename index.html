@@ -18,19 +18,20 @@
     </div>
     <div class="w3-main" style="margin-left:300px">
       <div class="w3-card-4 w3-dark-grey">
-        <button class="w3-button w3-xlarge w3-hide-large" onclick="w3_open()">&#9776;</button>
+        <button class="w3-button w3-xlarge w3-hide-large w3-top" onclick="w3_open()">&#9776; Menu</button>
         <div class="w3-container w3-center">
-          <img id="smImage" class="w3-image" src="https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/Highland%20Archer_lv10.png"/>
+          <br />
+          <br />
           
-          <div class="w3-section">
-            <p><i class="far fa-clone"></i> Max cap : <b id="max">400000</b></p>
-            <p><i class="fas fa-chart-line"></i> Supply : <b id="now">?</b></p>
-            <p id="remaining" class="w3-large"><i class="fas fa-sync-alt"></i> Remaining : <b id="rest">?</b> (<b id="percent">?</b>%)</p>
-          </div>
+          <img id="smImage" class="w3-image w3-section" src="https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/Highland%20Archer_lv10.png" style="max-height: 350px"/>
+          <p><b id="left"></b><b id="right"></b></p>
+          <p><i class="fas fa-chart-line"></i> Supply : <b id="now">?</b> / <b id="max">400000</b></p>
+          <p id="remaining" class="w3-large"><b id="rest"></b> <b id="percent"></b></p>
+          <p><b id="price"></b> / On sale : <b id="onsale"></b>
         </div>
       </div>
       <div class="w3-container w3-padding-24" style="border:4px solid white">
-        <h4>Made with <b>love</b> <i class="far fa-heart w3-text-red"></i>, by <a href="https://steempeak.com/@deadzy">@deadzy</a>. You can support me with steem or by sending cards !</h4>
+        <h4 class="w3-right">Made with <b>love</b> <i class="far fa-heart w3-text-red"></i>, by <a href="https://steempeak.com/@deadzy">@deadzy</a>.</h4>
       </div>
     </div>
   </body>
