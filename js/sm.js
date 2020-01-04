@@ -93,7 +93,6 @@ function showCard(id)
 		getjsoncard = localStorage.getItem(id);
 		getinfocard = JSON.parse(getjsoncard);
 
-		console.log(((today-getinfocard['date'])/1000/60/60));
 		if(((today-getinfocard['date'])/1000/60/60) >= 1)
 		{
 			let setinfocard = { idcard : id, pricecard : price['low_price'], qtycard : price['qty'], date : today};
@@ -123,6 +122,19 @@ function showCard(id)
 	$("button").removeClass("w3-red");
 	$("#"+id).toggleClass("w3-red");
 
+	card["distribution"].forEach(function(dist)
+	{
+		if(dist.gold)
+		{
+			burnG = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
+			G = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+		}
+		else
+		{
+			burnN = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
+			N = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+		}
+	});
 	$("#max").text(card["maxcap"]);
 	$("#price").html(price['low_price']+"$ "+percentCard(price['low_price'], getinfocard["pricecard"]));
 	$("#onsale").html(price['qty']+" "+qtyCard(price['qty'], getinfocard['qtycard'])+percentCard(price['qty'], getinfocard['qtycard']));
@@ -150,6 +162,19 @@ function showCard(id)
 				$("#remaining").attr("class", "w3-text-green");	
 		}
 	}
+	perc = 0;
+	$("#chartRBasicText").html("<i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+N+" BCX");
+	$("#chartBBasicText").html("-"+burnN+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i>");
+	perc = (N/(N+burnN)*100).toFixed(0);
+	$("#chartRBasic").width((perc-34)+"%");
+	$("#chartRBasic").text(perc+"%");
+	perc = 0;
+	$("#chartRGoldText").html("<i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+G+" Gold BCX");
+	$("#chartBGoldText").html("-"+burnG+" Gold BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i>");
+	perc = (G/(G+burnG)*100).toFixed(0);
+	$("#chartRGold").width((perc-34)+"%");
+	$("#chartRGold").text(perc+"%");
+
 	w3_close();
 }
 
@@ -191,4 +216,55 @@ function qtyCard(qty, last)
 			return "(<b class='w3-text-green'>+"+p+"</b>)";
 		}
 	}
+}
+
+function xptoBCX(totalxp, gold, edition, rarity, supply)
+{
+	if(edition == 1 || edition == 3 || edition == 2)
+	{
+		if(!gold)
+		{
+			if(rarity == 1) xp = 15;
+			if(rarity == 2) xp = 75;
+			if(rarity == 3) xp = 175;
+			if(rarity == 4) xp = 750;
+
+			bcx = Math.floor(totalxp/xp+parseInt(supply));
+		}
+		else
+		{
+			if(rarity == 1) xp = 200;
+			if(rarity == 2) xp = 400;
+			if(rarity == 3) xp = 800;
+			if(rarity == 4) xp = 2000;
+
+			bcx = Math.floor(totalxp/xp);
+		}
+	}
+	else if(edition == 0)
+	{
+		if(!gold)
+		{
+			if(rarity == 1) xp = 20;
+			if(rarity == 2) xp = 100;
+			if(rarity == 3) xp = 250;
+			if(rarity == 4) xp = 1000;
+
+			bcx = Math.floor(totalxp/xp+parseInt(supply));
+		}
+		else
+		{
+			if(rarity == 1) xp = 250;
+			if(rarity == 2) xp = 500;
+			if(rarity == 3) xp = 1000;
+			if(rarity == 4) xp = 2500;
+			
+			bcx = Math.floor(totalxp/xp);			
+		}
+	}
+	else
+	{
+		bcx = totalxp;
+	}
+	return bcx;
 }
