@@ -10,46 +10,29 @@
     <script type="text/javascript" src="./js/sm.js"></script>
   </head>
   <body>
-    <div id="nav" class="w3-sidebar w3-bar-block w3-light-grey w3-card w3-animate-left w3-collapse" style="width:300px">
-      <button class="w3-bar-item w3-button w3-large w3-hide-large" onclick="w3_close()">Close &times;</button>
-      <a href="https://steemmonsters.com?ref=deadzy"><img class="w3-bar-item w3-image w3-dark-grey" src="https://d36mxiodymuqjm.cloudfront.net/website/ui_elements/shop/logo_untamed.png"></a>
-      <h4 class="w3-bar-item w3-dark-grey"><i class="fas fa-list-ul"></i> Card reward's list</h4>
-      <div id="tab" class="w3-dark-grey"></div>
-    </div>
-    <div class="w3-main" style="margin-left:300px">
-      <div class="w3-card-4 w3-dark-grey">
-        <button class="w3-button w3-xlarge w3-hide-large w3-top" onclick="w3_open()">&#9776; Menu</button>
-        <div class="w3-container w3-center">
-          <br />
-          <br />
+    <div class="w3-main w3-dark-grey">
+
+      <div class="w3-bar w3-border w3-dark-grey w3-padding">
+        <a href="https://deadz.github.io/SM.rewards/" class="w3-bar-item w3-button"><i class="fas fa-home"></i> Home</a>
+        <a href="https://deadz.github.io/SM.rewards/old/index.html" class="w3-bar-item w3-button">Hold version</a>
+        <a href="https://deadz.github.io/SM.marketcap/" class="w3-bar-item w3-button">Marketcap</a>
+        <a href="https://deadz.github.io/SM.marketcapburned/" class="w3-bar-item w3-button">Burned marketcap</a>
+        <h5 class="w3-right">Made with <b>love</b> <i class="far fa-heart w3-text-red"></i>, by <a href="https://peakd.com/@deadzy">@deadzy</a>.</h5>
+      </div>
+
+      <table class="w3-table-all">
+        <thead>
+          <tr class="w3-light-grey">
+            <th>Card</th>
+            <th>Name</th>
+            <th>Burned cards</th>
+            <th>Market for basic card</th>
+          </tr>
+        </thead>
+        <tbody>
           
-          <img id="smImage" class="w3-image w3-section" src="https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/Highland%20Archer_lv10.png" style="max-height: 350px"/>
-          <p><b id="left"></b><b id="right"></b></p>
-          <p><i class="fas fa-chart-line"></i> Supply : <b id="now">?</b> / <b id="max">400000</b></p>
-          <p id="remaining" class="w3-large"><b id="rest"></b> <b id="percent"></b></p>
-          <p><b id="price"></b> / On sale : <b id="onsale"></b>
-          <div class="w3-padding-24">
-            <div class="w3-row">
-              <b id="chartRBasicText" class="w3-left"></b>
-              <b id="chartBBasicText" class="w3-right"></b>
-            </div>
-            <div class="w3-row w3-small w3-round w3-red w3-border">
-              <div id="chartRBasic" class="w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black"></div>
-            </div>
-            <br />
-            <div class="w3-row w3-small w3-round w3-deep-orange w3-border">
-              <div id="chartRGold" class="w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black"></div>
-            </div>
-            <div class="w3-row">
-              <b id="chartRGoldText" class="w3-left"></b>
-              <b id="chartBGoldText" class="w3-right"></b>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="w3-container w3-padding-24">
-        <h4 class="w3-right">Made with <b>love</b> <i class="far fa-heart w3-text-red"></i>, by <a href="https://steempeak.com/@deadzy">@deadzy</a>.</h4>
-      </div>
+        </tbody>
+      </table>
     </div>
   </body>
 </html>

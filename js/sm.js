@@ -51,131 +51,100 @@ function getRewardCards()
 				  	card['maxlvl'] = 4;
 				}
 
-				if((card['maxcap']-card["total_printed"]) >= 1)
-					$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='fas fa-dot-circle "+card["color"]+"'></i> "+card["name"]+"</button>");
-				else
-					$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='far fa-circle "+card["color"]+"'></i> <del class='w3-text-black'>"+card["name"]+"</del></button>");
+				card['price'] = prices.find(p => p.card_detail_id === card.id).low_price;
+				card['onsal'] = prices.find(p => p.card_detail_id === card.id).qty;
+				card['distribution'].forEach(function(dist)
+				{
+					if(card.tier == 4)
+					{
+						dist.edition = "4";
+					}
 
+					if(dist.gold)
+					{
+						card['numGoldBurn'] = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
+						card['numGold'] = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+					}
+					else
+					{
+						card['numBurn'] = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
+						card['num'] = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+					}
+				});
+
+				card['rest'] = card.maxcap-card.total_printed;
+
+				card['numPers'] = (card.num/(card.num+card.numBurn)*100).toFixed(0);
+				card['numGoldPers'] = (card.numGold/(card.numGold+card.numGoldBurn)*100).toFixed(0);
+
+				if(card.rest > 0)
+				{
+					card['finish'] = false;
+				}
+				else
+				{
+					card['finish'] = true;
+				}
 			});
-			showCard(79);
+			showCard();
 		}
 	});
 }
 
-function w3_open()
+function showCard()
 {
-	document.getElementById("nav").style.width = "100%";
-	document.getElementById("nav").style.display = "block";
-}
-
-function w3_close()
-{
-	document.getElementById("nav").style.width = "300px";
-	document.getElementById("nav").style.display = "none";
-}
-
-function showCard(id)
-{
-	price = prices.find(p => p.card_detail_id === id);
-	card = cards.find(c => c.id === id);
-	let ind = cards.lastIndexOf(card);
-
-	if(localStorage.getItem(card['id']) === null)
+	cards.forEach(function(card)
 	{
-		let setinfocard = { idcard : id, pricecard : price['low_price'], qtycard : price['qty'], date : today};
-		let setjsoncard = JSON.stringify(setinfocard);
-		localStorage.setItem(id, setjsoncard);
-
-		getinfocard = { pricecard : price['low_price'], qtycard : price['qty']};
-	}
-	else
-	{
-		getjsoncard = localStorage.getItem(id);
-		getinfocard = JSON.parse(getjsoncard);
-
-		if(((today-getinfocard['date'])/1000/60/60) >= 1)
+		if(localStorage.getItem(card.id) === null)
 		{
-			let setinfocard = { idcard : id, pricecard : price['low_price'], qtycard : price['qty'], date : today};
+			let setinfocard = { idcard : card.id, pricecard : card.price, qtycard : card.onsal, date : today};
 			let setjsoncard = JSON.stringify(setinfocard);
 			localStorage.setItem(id, setjsoncard);
-		}
-	}
 
-	if(ind > 0)
-	{
-		$("#left").html("<button class='w3-button w3-left w3-hover-dark-grey w3-hover-text-black'><i onclick='showCard("+cards[ind-1]["id"]+")' class='w3-jumbo fas fa-arrow-alt-circle-left'></i></button>");
-	}
-	else
-	{
-		$("#left").html("");
-	}
-	if(ind < cards.length-1)
-	{
-		$("#right").html("<button class='w3-button w3-right w3-hover-dark-grey w3-hover-text-black'><i onclick='showCard("+cards[ind+1]["id"]+")' class='w3-jumbo fas fa-arrow-alt-circle-right'></i></button>");
-	}
-	else
-	{
-		$("#right").html("");
-	}
-
-	// menu selected
-	$("button").removeClass("w3-red");
-	$("#"+id).toggleClass("w3-red");
-
-	card["distribution"].forEach(function(dist)
-	{
-		if(dist.gold)
-		{
-			burnG = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
-			G = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+			getinfocard = { pricecard : card.price, qtycard : card.onsal};
 		}
 		else
 		{
-			burnN = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
-			N = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+			getjsoncard = localStorage.getItem(card.id);
+			getinfocard = JSON.parse(getjsoncard);
+
+			if(((today-getinfocard['date'])/1000/60/60) >= 1)
+			{
+				let setinfocard = { idcard : card.id, pricecard : card.price, qtycard : card.onsal, date : today};
+				let setjsoncard = JSON.stringify(setinfocard);
+				localStorage.setItem(card.id, setjsoncard);
+			}
 		}
-	});
-	$("#max").text(card["maxcap"]);
-	$("#price").html(price['low_price']+"$ "+percentCard(price['low_price'], getinfocard["pricecard"]));
-	$("#onsale").html(price['qty']+" "+qtyCard(price['qty'], getinfocard['qtycard'])+percentCard(price['qty'], getinfocard['qtycard']));
-	$("#smImage").attr("src","https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+card["name"]+"_lv"+card["maxlvl"]+".png")
-	$("#now").text(card["total_printed"]);
-	rest = card["maxcap"]-card["total_printed"];
-	$("#rest").html("<i class='fas fa-sync-alt'></i> "+rest);
-	percent = (rest/card["maxcap"]*100).toFixed(2);
-	$("#percent").text("("+percent+"%) remaining");
-	if(percent <= 0)
-	{
-		$("#remaining").attr("class", "w3-text-black");
-		$("#rest").html("<i class='fas fa-skull-crossbones w3-large'></i> This card will <b class='w3-text-red'>NEVER</b> be printed again!");
-		$("#percent").text("");
-	}
-	else
-	{
-		if(percent < 5.01)
-			$("#remaining").attr("class", "w3-text-red");
-		else
+
+		percent = (card.rest/card.maxcap*100).toFixed(2);
+
+		if(percent > 0)
 		{
-			if(percent > 5 && percent < 20.01)
-				$("#remaining").attr("class", "w3-text-orange");
+			if(percent < 5.01)
+				percent = "<b class='w3-text-red'>"+percent+"%</b>";
 			else
-				$("#remaining").attr("class", "w3-text-green");	
+			{
+				if(percent > 5 && percent < 20.01)
+					percent = "<b class='w3-text-orange'>"+percent+"%</b>";
+				else
+					percent = "<b class='w3-text-green'>"+percent+"%</b>";	
+			}
 		}
-	}
-	perc = 0;
-	$("#chartRBasicText").html("<i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+N+" BCX");
-	$("#chartBBasicText").html("-"+burnN+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i>");
-	perc = (N/(N+burnN)*100).toFixed(0);
-	$("#chartRBasic").width((perc-34)+"%");
-	$("#chartRBasic").text(perc+"%");
-	perc = 0;
-	$("#chartRGoldText").html("<i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+G+" Gold BCX");
-	$("#chartBGoldText").html("-"+burnG+" Gold BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i>");
-	perc = (G/(G+burnG)*100).toFixed(0);
-	$("#chartRGold").width((perc-34)+"%");
-	$("#chartRGold").text(perc+"%");
 
-	w3_close();
+		$('tbody').prepend("<tr class='w3-text-black' id='"+card.id+"'></tr>");
+		if(card.finish)
+		{
+			$("#"+card.id).append("<td><img class='w3-image w3-round w3-grayscale-max' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+card["name"]+"_lv"+card["maxlvl"]+".png'></td>");
+			$("#"+card.id).append("<td><i class='far fa-circle w3-xlarge "+card.color+"'></i> <del><b class='w3-large'>"+card.name+"</b></del><br /><i class='fas fa-skull-crossbones w3-large'></i> <b>NEVER</b> be print again!<br />Supply <i class='fas fa-chart-line'></i> "+card.total_printed+"/<b>"+card.maxcap+"</b></td>");
+		}
+		else
+		{
+			$("#"+card.id).append("<td><img class='w3-image w3-round' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+card["name"]+"_lv"+card["maxlvl"]+".png'></td>");
+			$("#"+card.id).append("<td><p><i class='fas fa-dot-circle w3-xlarge "+card.color+"'></i> <b class='w3-large'>"+card.name+"</b></p><p><i class='fas fa-sync-alt'></i> "+card.rest+" remaining ("+percent+")</p>Supply <i class='fas fa-chart-line'></i> "+card.total_printed+"/<b>"+card.maxcap+"</b></td>");
+		}
+		$("#"+card.id).append("<td><b class='w3-row'><span class='w3-left'><i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card.num+" BCX</span><span class='w3-right'>-"+card.numBurn+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i></span></b><div class='w3-row w3-small w3-round w3-red w3-border'><div class='w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+(card.numPers)+"%;'>"+card.numPers+"%</div></div><br /><div class='w3-row w3-small w3-round w3-deep-orange w3-border'><div class='w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+card.numGoldPers+"%;'>"+card.numGoldPers+"%</div></div><b class='w3-row'><span class='w3-left'><i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card.numGold+" GOLD BCX</span><span class='w3-right'>-"+card.numGoldBurn+" GOLD BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i></span></b></td>");
+		$("#"+card.id).append("<td><b>"+card.price+"</b><i class='fas fa-dollar-sign'></i> / Card lvl 1<br /><center>"+prixCard(card.price, getinfocard["pricecard"])+" "+percentCard(card.price, getinfocard["pricecard"])+"</center><br /><br /><i class='fas fa-shopping-cart'></i> <b>"+card.onsal+"</b> Cards, on the market.<br /><center>"+qtyCard(card.onsal, getinfocard['qtycard'])+" "+percentCard(card.onsal, getinfocard['qtycard'])+"</center></td>");
+	});
 }
 
 function percentCard(price, last)
@@ -198,6 +167,26 @@ function percentCard(price, last)
 	}
 }
 
+function prixCard(qty, last)
+{
+	let p = (qty-last).toFixed(3);
+	if(p == 0)
+	{
+		return "";
+	}
+	else
+	{
+		if(p < 0)
+		{
+			return "<b class='w3-text-red'>"+p+"</b>$";
+		}
+		else
+		{
+			return "<b class='w3-text-green'>+"+p+"</b>$";
+		}
+	}
+}
+
 function qtyCard(qty, last)
 {
 	let p = (qty-last).toFixed(0);
@@ -209,11 +198,11 @@ function qtyCard(qty, last)
 	{
 		if(p < 0)
 		{
-			return "(<b class='w3-text-red'>"+p+"</b>)";
+			return "<b class='w3-text-red'>"+p+"</b>";
 		}
 		else
 		{
-			return "(<b class='w3-text-green'>+"+p+"</b>)";
+			return "<b class='w3-text-green'>+"+p+"</b>";
 		}
 	}
 }
@@ -266,5 +255,5 @@ function xptoBCX(totalxp, gold, edition, rarity, supply)
 	{
 		bcx = totalxp;
 	}
-	return bcx;
+	return parseInt(bcx);
 }
