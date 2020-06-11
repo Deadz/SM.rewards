@@ -143,7 +143,7 @@ function showCard()
 			$("#"+card.id).append("<td><p><i class='fas fa-dot-circle w3-xlarge "+card.color+"'></i> <b class='w3-large'>"+card.name+"</b></p><p><i class='fas fa-sync-alt'></i> "+card.rest+" remaining ("+percent+")</p>Supply <i class='fas fa-chart-line'></i> "+card.total_printed+"/<b>"+card.maxcap+"</b></td>");
 		}
 		$("#"+card.id).append("<td><b class='w3-row'><span class='w3-left'><i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card.num+" BCX</span><span class='w3-right'>-"+card.numBurn+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i></span></b><div class='w3-row w3-small w3-round w3-red w3-border'><div class='w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+(card.numPers)+"%;'>"+card.numPers+"%</div></div><br /><div class='w3-row w3-small w3-round w3-deep-orange w3-border'><div class='w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+card.numGoldPers+"%;'>"+card.numGoldPers+"%</div></div><b class='w3-row'><span class='w3-left'><i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card.numGold+" GOLD BCX</span><span class='w3-right'>-"+card.numGoldBurn+" GOLD BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i></span></b></td>");
-		$("#"+card.id).append("<td><b>"+card.price+"</b><i class='fas fa-dollar-sign'></i> / Card lvl 1<br /><center>"+prixCard(card.price, getinfocard["pricecard"])+"$ "+percentCard(card.price, getinfocard["pricecard"])+"</center><br /><br /><i class='fas fa-shopping-cart'></i> <b>"+card.onsal+"</b> Cards, on the market.<br /><center>"+qtyCard(card.onsal, getinfocard['qtycard'])+" cards "+percentCard(card.onsal, getinfocard['qtycard'])+"</center></td>");
+		$("#"+card.id).append("<td><b>"+card.price+"</b><i class='fas fa-dollar-sign'></i> / Card lvl 1<br /><center>"+prixCard(card.price, getinfocard["pricecard"])+" <b>$</b> "+percentCard(card.price, getinfocard["pricecard"])+"</center><br /><br /><i class='fas fa-shopping-cart'></i> <b>"+card.onsal+"</b> Cards, on the market.<br /><center>"+qtyCard(card.onsal, getinfocard['qtycard'])+" cards "+percentCard(card.onsal, getinfocard['qtycard'])+"</center></td>");
 	});
 }
 
@@ -178,11 +178,11 @@ function prixCard(qty, last)
 	{
 		if(p < 0)
 		{
-			return "<b class='w3-text-red'>"+p+"</b>$";
+			return "<b class='w3-text-red'>"+p+"</b>";
 		}
 		else
 		{
-			return "<b class='w3-text-green'>+"+p+"</b>$";
+			return "<b class='w3-text-green'>+"+p+"</b>";
 		}
 	}
 }
