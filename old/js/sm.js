@@ -271,5 +271,5 @@ function xptoBCX(totalxp, gold, edition, rarity, supply)
 	{
 		bcx = totalxp;
 	}
-	return bcx;
+	return parseInt(bcx);
 }
