@@ -124,6 +124,11 @@ function showCard(id)
 
 	card["distribution"].forEach(function(dist)
 	{
+		if(card.tier == 4)
+		{
+			dist.edition = "4";
+		}
+		
 		if(dist.gold)
 		{
 			burnG = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
