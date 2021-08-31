@@ -99,7 +99,7 @@ function showCard()
 		{
 			let setinfocard = { idcard : card.id, pricecard : card.price, qtycard : card.onsal, date : today};
 			let setjsoncard = JSON.stringify(setinfocard);
-			localStorage.setItem(id, setjsoncard);
+			localStorage.setItem(card.id, setjsoncard);
 
 			getinfocard = { pricecard : card.price, qtycard : card.onsal};
 		}
