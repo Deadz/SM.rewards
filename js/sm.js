@@ -50,14 +50,26 @@ function getRewardCards()
 				  	card['maxcap'] = 10000;
 				  	card['maxlvl'] = 4;
 				}
-
-				card['price'] = prices.find(p => p.card_detail_id === card.id).low_price;
-				card['onsal'] = prices.find(p => p.card_detail_id === card.id).qty;
+				if(prices.find(p => p.card_detail_id === card.id) != undefined) //Pour eviter les erreurs avec les ajouts de new rewards
+				{
+					card['price'] = prices.find(p => p.card_detail_id === card.id).low_price;
+					card['onsal'] = prices.find(p => p.card_detail_id === card.id).qty;
+				}
+				else
+				{
+					card['price'] = 0;
+					card['onsal'] = 0;
+				}
 				card['distribution'].forEach(function(dist)
 				{
 					if(card.tier == 4)
 					{
 						dist.edition = "4";
+					}
+					if(card.tier == 7 && !dist.gold)
+					{
+						dist.edition = "7";
+						card['maxcap'] = card['maxcap']*20; // New print rate
 					}
 
 					if(dist.gold)
@@ -134,15 +146,15 @@ function showCard()
 		$('tbody').prepend("<tr class='w3-text-black' id='"+card.id+"'></tr>");
 		if(card.finish)
 		{
-			$("#"+card.id).append("<td><img class='w3-image w3-round w3-grayscale-max' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+card["name"]+"_lv"+card["maxlvl"]+".png'></td>");
-			$("#"+card.id).append("<td><i class='far fa-circle w3-xlarge "+card.color+"'></i> <del><b class='w3-large'>"+card.name+"</b></del><br /><i class='fas fa-skull-crossbones w3-large'></i> <b>NEVER</b> be print again!<br />Supply <i class='fas fa-chart-line'></i> "+card.total_printed+"/<b>"+card.maxcap+"</b></td><td></td>");
+			$("#"+card.id).append("<td><img class='w3-image w3-round w3-grayscale-max' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+encodeURL(card["name"])+"_lv"+card["maxlvl"]+".png'></td>");
+			$("#"+card.id).append("<td><i class='far fa-circle w3-xlarge "+card.color+"'></i> <del><b class='w3-large'>"+card.name+"</b></del><br /><i class='fas fa-skull-crossbones w3-large'></i> <b>NEVER</b> be print again!<br />Supply <i class='fas fa-chart-line'></i> : <br />"+card.total_printed.toLocaleString()+"/<b>"+card.maxcap.toLocaleString()+"</b></td><td></td>");
 		}
 		else
 		{
-			$("#"+card.id).append("<td><img class='w3-image w3-round' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+card["name"]+"_lv"+card["maxlvl"]+".png'></td>");
-			$("#"+card.id).append("<td><p><i class='fas fa-dot-circle w3-xlarge "+card.color+"'></i> <b class='w3-large'>"+card.name+"</b></p><p><i class='fas fa-sync-alt'></i> "+card.rest+" cards remaining</p>Supply <i class='fas fa-chart-line'></i> "+card.total_printed+"/<b>"+card.maxcap+"</b></td><td>("+percent+")</td>");
+			$("#"+card.id).append("<td><img class='w3-image w3-round' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+encodeURL(card["name"])+"_lv"+card["maxlvl"]+".png'></td>");
+			$("#"+card.id).append("<td><p><i class='fas fa-dot-circle w3-xlarge "+card.color+"'></i> <b class='w3-large'>"+card.name+"</b></p><p><i class='fas fa-sync-alt'></i> "+card.rest.toLocaleString()+" cards remaining</p>Supply <i class='fas fa-chart-line'></i>  : <br />"+card.total_printed.toLocaleString()+"/<b>"+card.maxcap.toLocaleString()+"</b></td><td>("+percent+")</td>");
 		}
-		$("#"+card.id).append("<td><b class='w3-row'><span class='w3-left'><i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card.num+" BCX</span><span class='w3-right'>-"+card.numBurn+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i></span></b><div class='w3-row w3-small w3-round w3-red w3-border'><div class='w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+(card.numPers)+"%;'>"+card.numPers+"%</div></div><br /><div class='w3-row w3-small w3-round w3-deep-orange w3-border'><div class='w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+card.numGoldPers+"%;'>"+card.numGoldPers+"%</div></div><b class='w3-row'><span class='w3-left'><i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card.numGold+" GOLD BCX</span><span class='w3-right'>-"+card.numGoldBurn+" GOLD BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i></span></b></td>");
+		$("#"+card.id).append("<td><b class='w3-row'><span class='w3-left'><i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card.num.toLocaleString()+" BCX</span><span class='w3-right'>-"+card.numBurn.toLocaleString()+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i></span></b><div class='w3-row w3-small w3-round w3-red w3-border'><div class='w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+(card.numPers)+"%;'>"+card.numPers+"%</div></div><br /><div class='w3-row w3-small w3-round w3-deep-orange w3-border'><div class='w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+card.numGoldPers+"%;'>"+card.numGoldPers+"%</div></div><b class='w3-row'><span class='w3-left'><i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card.numGold.toLocaleString()+" GOLD BCX</span><span class='w3-right'>-"+card.numGoldBurn.toLocaleString()+" GOLD BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i></span></b></td>");
 		$("#"+card.id).append("<td><b>"+card.price+"</b><i class='fas fa-dollar-sign'></i> / Card lvl 1<br />"+prixCard(card.price, getinfocard["pricecard"])+" "+percentCard(card.price, getinfocard["pricecard"])+"<br /><br /><i class='fas fa-shopping-cart'></i> <b>"+card.onsal+"</b> Cards, on the market.<br />"+qtyCard(card.onsal, getinfocard['qtycard'])+" "+percentCard(card.onsal, getinfocard['qtycard'])+"</td>");
 	});
 }
@@ -256,6 +268,14 @@ function xptoBCX(totalxp, gold, edition, rarity, supply)
 		bcx = totalxp;
 	}
 	return parseInt(bcx);
+}
+
+function encodeURL(str)
+{
+	return encodeURIComponent(str).replace(/[!'()*]/g, function(c)
+	{
+   	return '%' + c.charCodeAt(0).toString(16);
+  	});
 }
 
 /* 

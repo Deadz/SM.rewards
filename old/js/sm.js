@@ -128,6 +128,11 @@ function showCard(id)
 		{
 			dist.edition = "4";
 		}
+		if(card.tier == 7 && !dist.gold)
+		{
+			dist.edition = "7";
+			card['maxcap'] = card['maxcap']*20; // New print rate
+		}
 		
 		if(dist.gold)
 		{
