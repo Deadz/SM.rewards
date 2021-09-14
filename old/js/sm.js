@@ -128,21 +128,31 @@ function showCard(id)
 		{
 			dist.edition = "4";
 		}
-		if(card.tier == 7 && !dist.gold)
+		if(card.tier == 7)
 		{
 			dist.edition = "7";
-			card['maxcap'] = card['maxcap']*20; // New print rate
+			if(dist.gold)
+			{
+				card['numGoldBurn'] = dist.total_burned_xp;
+				card['numGold'] = dist.total_xp-dist.total_burned_xp;
+			}
+			else
+			{
+				card['numBurn'] = dist.total_burned_xp;
+				card['num'] = dist.total_xp-dist.total_burned_xp;
+				card['maxcap'] = card['maxcap']*20; // New print rate
+			}
 		}
-		
+
 		if(dist.gold)
 		{
-			burnG = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
-			G = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+			card['numGoldBurn'] = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
+			card['numGold'] = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
 		}
 		else
 		{
-			burnN = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
-			N = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+			card['numBurn'] = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
+			card['num'] = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
 		}
 	});
 	$("#max").text(card["maxcap"]);

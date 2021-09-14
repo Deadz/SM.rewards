@@ -28,6 +28,7 @@ function getRewardCards()
 			cards = data.filter(d => d["editions"].search("3") > -1);
 			cards.forEach(function(card)
 			{
+				console.log(card);
 				switch(card["rarity"])
 				{
 				  case 1:
@@ -66,10 +67,20 @@ function getRewardCards()
 					{
 						dist.edition = "4";
 					}
-					if(card.tier == 7 && !dist.gold)
+					if(card.tier == 7)
 					{
 						dist.edition = "7";
-						card['maxcap'] = card['maxcap']*20; // New print rate
+						if(dist.gold)
+						{
+							card['numGoldBurn'] = dist.total_burned_xp;
+							card['numGold'] = dist.total_xp-dist.total_burned_xp;
+						}
+						else
+						{
+							card['numBurn'] = dist.total_burned_xp;
+							card['num'] = dist.total_xp-dist.total_burned_xp;
+							card['maxcap'] = card['maxcap']*20; // New print rate
+						}
 					}
 
 					if(dist.gold)
@@ -146,13 +157,13 @@ function showCard()
 		$('tbody').prepend("<tr class='w3-text-black' id='"+card.id+"'></tr>");
 		if(card.finish)
 		{
-			$("#"+card.id).append("<td><img class='w3-image w3-round w3-grayscale-max' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+encodeURL(card["name"])+"_lv"+card["maxlvl"]+".png'></td>");
+			$("#"+card.id).append("<td><img class='w3-image w3-round w3-grayscale-max' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+encodeURL(card["name"])+"_lv"+card["maxlvl"]+".png'><b style='writing-mode: vertical-rl; text-orientation: sideways-left;'>#"+card.id+"</b></td>");
 			$("#"+card.id).append("<td><i class='far fa-circle w3-xlarge "+card.color+"'></i> <del><b class='w3-large'>"+card.name+"</b></del><br /><i class='fas fa-skull-crossbones w3-large'></i> <b>NEVER</b> be print again!<br />Supply <i class='fas fa-chart-line'></i> : <br />"+card.total_printed.toLocaleString()+"/<b>"+card.maxcap.toLocaleString()+"</b></td><td></td>");
 		}
 		else
 		{
-			$("#"+card.id).append("<td><img class='w3-image w3-round' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+encodeURL(card["name"])+"_lv"+card["maxlvl"]+".png'></td>");
-			$("#"+card.id).append("<td><p><i class='fas fa-dot-circle w3-xlarge "+card.color+"'></i> <b class='w3-large'>"+card.name+"</b></p><p><i class='fas fa-sync-alt'></i> "+card.rest.toLocaleString()+" cards remaining</p>Supply <i class='fas fa-chart-line'></i>  : <br />"+card.total_printed.toLocaleString()+"/<b>"+card.maxcap.toLocaleString()+"</b></td><td>("+percent+")</td>");
+			$("#"+card.id).append("<td><img class='w3-image w3-round' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+encodeURL(card["name"])+"_lv"+card["maxlvl"]+".png'><b style='writing-mode: vertical-rl; text-orientation: sideways-left;'>#"+card.id+"</b></td>");
+			$("#"+card.id).append("<td><p><i class='fas fa-dot-circle w3-xlarge "+card.color+"'></i> <b class='w3-large'>"+card.name+"</b></p><p><i class='fas fa-sync-alt'></i> "+card.rest.toLocaleString()+" to print out.</p>Supply <i class='fas fa-chart-line'></i>  : <br />"+card.total_printed.toLocaleString()+"/<b>"+card.maxcap.toLocaleString()+"</b></td><td>("+percent+")</td>");
 		}
 		$("#"+card.id).append("<td><b class='w3-row'><span class='w3-left'><i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card.num.toLocaleString()+" BCX</span><span class='w3-right'>-"+card.numBurn.toLocaleString()+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i></span></b><div class='w3-row w3-small w3-round w3-red w3-border'><div class='w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+(card.numPers)+"%;'>"+card.numPers+"%</div></div><br /><div class='w3-row w3-small w3-round w3-deep-orange w3-border'><div class='w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+card.numGoldPers+"%;'>"+card.numGoldPers+"%</div></div><b class='w3-row'><span class='w3-left'><i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card.numGold.toLocaleString()+" GOLD BCX</span><span class='w3-right'>-"+card.numGoldBurn.toLocaleString()+" GOLD BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i></span></b></td>");
 		$("#"+card.id).append("<td><b>"+card.price+"</b><i class='fas fa-dollar-sign'></i> / Card lvl 1<br />"+prixCard(card.price, getinfocard["pricecard"])+" "+percentCard(card.price, getinfocard["pricecard"])+"<br /><br /><i class='fas fa-shopping-cart'></i> <b>"+card.onsal+"</b> Cards, on the market.<br />"+qtyCard(card.onsal, getinfocard['qtycard'])+" "+percentCard(card.onsal, getinfocard['qtycard'])+"</td>");
