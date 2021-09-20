@@ -4,7 +4,7 @@ var rest    = 0;
 var percent = 0;
 var today   = Date.now();
 
-$.ajax(
+$.ajax( // Prix de vente des cartes
 {
 	url: 'https://game-api.splinterlands.com/market/for_sale_grouped/',
 	dataType: 'json',
@@ -13,6 +13,17 @@ $.ajax(
 	{
 		prices = datas.filter(obj => obj.edition == 3 && obj.gold == 0);
 		getRewardCards();
+	}
+});
+
+$.ajax( // Nombre de DEC dans la reward pool
+{
+	url: 'https://game-api.splinterlands.com/players/balances?players=$REWARD_POOL&token_type=DEC',
+	dataType: 'json',
+	type : 'GET',
+	success: function(datas)
+	{
+		rewardpool = parseInt(datas[0].balance);
 	}
 });
 
@@ -28,7 +39,7 @@ function getRewardCards()
 			cards = data.filter(d => d["editions"].search("3") > -1);
 			cards.forEach(function(card)
 			{
-				console.log(card);
+				//console.log(card);
 				switch(card["rarity"])
 				{
 				  case 1:
@@ -168,6 +179,28 @@ function showCard()
 		$("#"+card.id).append("<td><b class='w3-row'><span class='w3-left'><i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card.num.toLocaleString()+" BCX</span><span class='w3-right'>-"+card.numBurn.toLocaleString()+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i></span></b><div class='w3-row w3-small w3-round w3-red w3-border'><div class='w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+(card.numPers)+"%;'>"+card.numPers+"%</div></div><br /><div class='w3-row w3-small w3-round w3-deep-orange w3-border'><div class='w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+card.numGoldPers+"%;'>"+card.numGoldPers+"%</div></div><b class='w3-row'><span class='w3-left'><i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card.numGold.toLocaleString()+" GOLD BCX</span><span class='w3-right'>-"+card.numGoldBurn.toLocaleString()+" GOLD BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i></span></b></td>");
 		$("#"+card.id).append("<td><b>"+card.price+"</b><i class='fas fa-dollar-sign'></i> / Card lvl 1<br />"+prixCard(card.price, getinfocard["pricecard"])+" "+percentCard(card.price, getinfocard["pricecard"])+"<br /><br /><i class='fas fa-shopping-cart'></i> <b>"+card.onsal+"</b> Cards, on the market.<br />"+qtyCard(card.onsal, getinfocard['qtycard'])+" "+percentCard(card.onsal, getinfocard['qtycard'])+"</td>");
 	});
+
+ // DEC POOL
+	if(localStorage.getItem(decpool) === null)
+	{
+		localStorage.setItem(decpool, rewardpool);
+	}
+	else
+	{
+		oldrewardpool = localStorage.getItem(decpool);
+		localStorage.setItem(decpool, rewardpool);
+		changeDecpool = rewardpool-oldrewardpool;
+		if(changeDecpool > 0)
+		{
+			changeDecpool = '(+<b class="w3-text-green">'+changeDecpool.toLocaleString()+'</b>)';
+		}
+		else
+		{
+			changeDecpool = '(<b class="w3-text-red">'+changeDecpool.toLocaleString()+'</b>)';
+		}
+	}
+
+	$("#decpool").html('|| DEC pool : '+rewardpool.toLocaleString()+' '+changeDecpool+'<img src="https://s2.coinmarketcap.com/static/img/coins/32x32/6264.png" class="w3-image">');
 }
 
 function percentCard(price, last)

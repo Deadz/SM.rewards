@@ -51,6 +51,44 @@ function getRewardCards()
 				  	card['maxlvl'] = 4;
 				}
 
+				card["distribution"].forEach(function(dist)
+				{
+					if(card.tier == 7)
+					{
+						dist.edition = "7";
+						if(dist.gold)
+						{
+							card['numGoldBurn'] = parseInt(dist.total_burned_xp);
+							card['numGold'] = parseInt(dist.total_xp-dist.total_burned_xp);
+						}
+						else
+						{
+							card['numBurn'] = parseInt(dist.total_burned_xp);
+							card['num'] = parseInt(dist.total_xp-dist.total_burned_xp);
+							card['maxcap'] = card['maxcap']*20; // New print rate
+						}
+					}
+					else
+					{
+						if(card.tier == 4)
+						{
+							dist.edition = "4";
+						}
+						if(dist.gold)
+						{
+							card['numGoldBurn'] = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
+							card['numGold'] = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+						}
+						else
+						{
+							card['numBurn'] = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
+							card['num'] = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
+						}
+					}
+					card['numPers'] = (card.num/(card.num+card.numBurn)*100).toFixed(0);
+					card['numGoldPers'] = (card.numGold/(card.numGold+card.numGoldBurn)*100).toFixed(0);
+				});
+
 				if((card['maxcap']-card["total_printed"]) >= 1)
 					$("#tab").append("<button id="+card['id']+" class='w3-bar-item w3-button' onclick='showCard("+card['id']+")'><i class='fas fa-dot-circle "+card["color"]+"'></i> "+card["name"]+"</button>");
 				else
@@ -122,41 +160,7 @@ function showCard(id)
 	$("button").removeClass("w3-red");
 	$("#"+id).toggleClass("w3-red");
 
-	card["distribution"].forEach(function(dist)
-	{
-		if(card.tier == 4)
-		{
-			dist.edition = "4";
-		}
-		if(card.tier == 7)
-		{
-			dist.edition = "7";
-			if(dist.gold)
-			{
-				card['numGoldBurn'] = dist.total_burned_xp;
-				card['numGold'] = dist.total_xp-dist.total_burned_xp;
-			}
-			else
-			{
-				card['numBurn'] = dist.total_burned_xp;
-				card['num'] = dist.total_xp-dist.total_burned_xp;
-				card['maxcap'] = card['maxcap']*20; // New print rate
-			}
-		}
-		else
-		{
-			if(dist.gold)
-			{
-				card['numGoldBurn'] = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
-				card['numGold'] = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
-			}
-			else
-			{
-				card['numBurn'] = xptoBCX(dist.total_burned_xp, dist.gold, dist.edition, card.rarity, dist.num_burned);
-				card['num'] = xptoBCX(dist.total_xp, dist.gold, dist.edition, card.rarity, dist.num_cards);
-			}
-		}
-	});
+
 	$("#max").text(card["maxcap"]);
 	$("#price").html(price['low_price']+"$ "+percentCard(price['low_price'], getinfocard["pricecard"]));
 	$("#onsale").html(price['qty']+" "+qtyCard(price['qty'], getinfocard['qtycard'])+percentCard(price['qty'], getinfocard['qtycard']));
@@ -184,18 +188,14 @@ function showCard(id)
 				$("#remaining").attr("class", "w3-text-green");	
 		}
 	}
-	perc = 0;
-	$("#chartRBasicText").html("<i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+N+" BCX");
-	$("#chartBBasicText").html("-"+burnN+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i>");
-	perc = (N/(N+burnN)*100).toFixed(0);
-	$("#chartRBasic").width((perc-34)+"%");
-	$("#chartRBasic").text(perc+"%");
-	perc = 0;
-	$("#chartRGoldText").html("<i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+G+" Gold BCX");
-	$("#chartBGoldText").html("-"+burnG+" Gold BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i>");
-	perc = (G/(G+burnG)*100).toFixed(0);
-	$("#chartRGold").width((perc-34)+"%");
-	$("#chartRGold").text(perc+"%");
+	$("#chartRBasicText").html("<i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card['num']+" BCX");
+	$("#chartBBasicText").html("-"+card['numBurn']+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i>");
+	$("#chartRBasic").width((card['numPers']-34)+"%");
+	$("#chartRBasic").text(card['numPers']+"%");
+	$("#chartRGoldText").html("<i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card['numGold']+" Gold BCX");
+	$("#chartBGoldText").html("-"+card['numGoldBurn']+" Gold BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i>");
+	$("#chartRGold").width((card['numGoldPers']-34)+"%");
+	$("#chartRGold").text(card['numGoldPers']+"%");
 
 	w3_close();
 }
