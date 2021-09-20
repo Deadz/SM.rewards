@@ -184,6 +184,7 @@ function showCard()
 	if(localStorage.getItem(decpool) === null)
 	{
 		localStorage.setItem(decpool, rewardpool);
+		changeDecpool = "";
 	}
 	else
 	{
