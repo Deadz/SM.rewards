@@ -9,15 +9,21 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="./js/sm.js"></script>
   </head>
-  <body>
-    <div class="w3-main w3-dark-grey">
-
-      <div class="w3-bar w3-border w3-dark-grey w3-xlarge w3-hide-small">
-        <a href="https://deadz.github.io/SM.rewards/" class="w3-bar-item w3-button"><i class="fas fa-home"></i> Home</a>
-        <a href="https://deadz.github.io/SM.rewards/old/index.html" class="w3-bar-item w3-button">Old version</a>
-        <a class="w3-bar-item" id="decpool"></a>
-        <h5 class="w3-right">Made with <b>love</b> <i class="far fa-heart w3-text-red"></i>, by <a href="https://peakd.com/@deadzy">@deadzy</a>.</h5>
+  <body class="w3-dark-grey">
+    <div class="w3-main">
+      <!-- Sidebar -->
+      <div class="w3-sidebar w3-bar-block w3-rightbar w3-dark-grey w3-border-white" style="display:none" id="mySidebar">
+        <button onclick="w3_close()" class="w3-bar-item w3-large w3-right">Close &times;</button>
+        <a href="https://deadz.github.io/SM.rewards/" class="w3-bar-item w3-button" target="_blank"><i class="fas fa-external-link-alt"></i> Reward pool</a>
+        <a href="https://deadz.github.io/SM.rewards/old/index.html" class="w3-bar-item w3-button" target="_blank"><i class="fas fa-external-link-alt"></i> Old version</a>
+        <a href="https://deadz.github.io/SexifyReward/" class="w3-bar-item w3-button" target="_blank"><i class="fas fa-external-link-alt"></i> Sexify reward</a>
       </div>
+      <nav>
+        <button class="w3-button w3-round-large w3-border-black w3-border w3-gray w3-left" onclick="w3_open()"><i class="fas fa-bars fa-lg"></i></button>
+        <h4>
+          <span class="w3-margin-left" id="decpool"></span>
+          <span class="w3-right w3-margin-right">Made with <b>love</b> <i class="far fa-heart w3-text-red"></i>, by <a href="https://peakd.com/@deadzy">@deadzy</a>.</h4>
+      </nav>
 
       <div class="w3-hide-large w3-hide-medium w3-panel w3-yellow">
         <h3>Hey!</h3>

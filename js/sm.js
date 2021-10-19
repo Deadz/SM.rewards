@@ -176,7 +176,7 @@ function showCard()
 			$("#"+card.id).append("<td><img class='w3-image w3-round' style='width:100%;max-width:100px' src='https://d36mxiodymuqjm.cloudfront.net/cards_by_level/reward/"+encodeURL(card["name"])+"_lv"+card["maxlvl"]+".png'><b style='writing-mode: vertical-rl; text-orientation: sideways-left;'>#"+card.id+"</b></td>");
 			$("#"+card.id).append("<td><p><i class='fas fa-dot-circle w3-xlarge "+card.color+"'></i> <b class='w3-large'>"+card.name+"</b></p><p><i class='fas fa-sync-alt'></i> "+card.rest.toLocaleString()+" to print out.</p>Supply <i class='fas fa-chart-line'></i>  : <br />"+card.total_printed.toLocaleString()+"/<b>"+card.maxcap.toLocaleString()+"</b></td><td>("+percent+")</td>");
 		}
-		$("#"+card.id).append("<td><b class='w3-row'><span class='w3-left'><i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card.num.toLocaleString()+" BCX</span><span class='w3-right'>-"+card.numBurn.toLocaleString()+" BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i></span></b><div class='w3-row w3-small w3-round w3-red w3-border'><div class='w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+(card.numPers)+"%;'>"+card.numPers+"%</div></div><br /><div class='w3-row w3-small w3-round w3-deep-orange w3-border'><div class='w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+card.numGoldPers+"%;'>"+card.numGoldPers+"%</div></div><b class='w3-row'><span class='w3-left'><i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card.numGold.toLocaleString()+" GOLD BCX</span><span class='w3-right'>-"+card.numGoldBurn.toLocaleString()+" GOLD BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i></span></b></td>");
+		$("#"+card.id).append("<td><b class='w3-row'><span class='w3-left'><i class='fas fa-level-down-alt' style='transform: rotate(-90deg);'></i> "+card.num.toLocaleString()+" BCX</span><span class='w3-right'>-"+card.numBurn.toLocaleString()+" <i class='fas fa-fire'></i> BCX <i class='fas fa-level-up-alt' style='transform: rotate(-90deg);'></i></span></b><div class='w3-row w3-small w3-round w3-red w3-border'><div class='w3-light-green w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+(card.numPers)+"%;'>"+card.numPers+"%</div></div><br /><div class='w3-row w3-small w3-round w3-deep-orange w3-border'><div class='w3-amber w3-col w3-container w3-center w3-round w3-border w3-border-black' style='width:"+card.numGoldPers+"%;'>"+card.numGoldPers+"%</div></div><b class='w3-row'><span class='w3-left'><i class='fas fa-level-up-alt' style='transform: rotate(-270deg);'></i> "+card.numGold.toLocaleString()+" GOLD BCX</span><span class='w3-right'>-"+card.numGoldBurn.toLocaleString()+" GOLD <i class='fas fa-fire'></i> BCX <i class='fas fa-level-down-alt' style='transform: rotate(-270deg);'></i></span></b></td>");
 		$("#"+card.id).append("<td><b>"+card.price+"</b><i class='fas fa-dollar-sign'></i> / Card lvl 1<br />"+prixCard(card.price, getinfocard["pricecard"])+" "+percentCard(card.price, getinfocard["pricecard"])+"<br /><br /><i class='fas fa-shopping-cart'></i> <b>"+card.onsal+"</b> Cards, on the market.<br />"+qtyCard(card.onsal, getinfocard['qtycard'])+" "+percentCard(card.onsal, getinfocard['qtycard'])+"</td>");
 	});
 
@@ -193,7 +193,7 @@ function showCard()
 		changeDecpool = rewardpool-oldrewardpool;
 		if(changeDecpool > 0)
 		{
-			changeDecpool = '(+<b class="w3-text-green">'+changeDecpool.toLocaleString()+'</b>)';
+			changeDecpool = '(<b class="w3-text-green">+'+changeDecpool.toLocaleString()+'</b>)';
 		}
 		else
 		{
@@ -201,7 +201,7 @@ function showCard()
 		}
 	}
 
-	$("#decpool").html('|| DEC pool : '+rewardpool.toLocaleString()+' '+changeDecpool+'<img src="https://s2.coinmarketcap.com/static/img/coins/32x32/6264.png" class="w3-image">');
+	$("#decpool").html('DEC pool : '+rewardpool.toLocaleString()+' '+changeDecpool+'<img src="https://s2.coinmarketcap.com/static/img/coins/32x32/6264.png" class="w3-image">');
 }
 
 function percentCard(price, last)
@@ -321,6 +321,18 @@ function encodeURL(str)
 	{
    	return '%' + c.charCodeAt(0).toString(16);
   	});
+}
+
+// Menu sidebar
+
+function w3_open()
+{
+  document.getElementById("mySidebar").style.display = "block";
+}
+
+function w3_close()
+{
+  document.getElementById("mySidebar").style.display = "none";
 }
 
 /* 
